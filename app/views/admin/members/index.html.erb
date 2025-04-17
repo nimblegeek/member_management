@@ -1,0 +1,52 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Members</h1>
+    <%= link_to "Add New Member", new_admin_member_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+  
+  <div class="mb-4">
+    <%= link_to "All Members", admin_members_path, class: "mr-4 #{params[:active_only].nil? && params[:inactive_only].nil? ? 'font-bold' : ''}" %>
+    <%= link_to "Active Only", admin_members_path(active_only: true), class: "mr-4 #{params[:active_only] == 'true' ? 'font-bold' : ''}" %>
+    <%= link_to "Inactive Only", admin_members_path(inactive_only: true), class: "#{params[:inactive_only] == 'true' ? 'font-bold' : ''}" %>
+  </div>
+  
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white">
+      <thead>
+        <tr class="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+          <th class="py-3 px-6 text-left">Name</th>
+          <th class="py-3 px-6 text-left">Email</th>
+          <th class="py-3 px-6 text-left">Phone</th>
+          <th class="py-3 px-6 text-left">Rank</th>
+          <th class="py-3 px-6 text-left">Status</th>
+          <th class="py-3 px-6 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 text-sm">
+        <% @members.each do |member| %>
+          <tr class="border-b border-gray-200 hover:bg-gray-100">
+            <td class="py-3 px-6 text-left"><%= link_to member.full_name, admin_member_path(member), class: "text-blue-600 hover:text-blue-900" %></td>
+            <td class="py-3 px-6 text-left"><%= member.email %></td>
+            <td class="py-3 px-6 text-left"><%= member.phone %></td>
+            <td class="py-3 px-6 text-left"><%= member.rank %></td>
+            <td class="py-3 px-6 text-left">
+              <span class="<%= member.active? ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800' %> py-1 px-3 rounded-full text-xs">
+                <%= member.active? ? 'Active' : 'Inactive' %>
+              </span>
+            </td>
+            <td class="py-3 px-6 text-center">
+              <%= link_to "Edit", edit_admin_member_path(member), class: "text-blue-600 hover:text-blue-900 mr-2" %>
+              <%= button_to "Delete", admin_member_path(member), method: :delete, class: "text-red-600 hover:text-red-900", data: { confirm: "Are you sure you want to delete this member?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  
+  <% if @members.empty? %>
+    <div class="text-center py-4">
+      <p class="text-gray-500">No members found.</p>
+    </div>
+  <% end %>
+</div> 

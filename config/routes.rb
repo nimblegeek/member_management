@@ -11,4 +11,18 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  namespace :admin do
+    resources :members
+    
+    # Authentication routes
+    get 'login', to: 'sessions#new'
+    post 'login', to: 'sessions#create'
+    delete 'logout', to: 'sessions#destroy'
+    
+    root to: 'members#index'
+  end
+  
+  # Redirect root to admin login for now
+  root to: redirect('/admin/login')
 end
